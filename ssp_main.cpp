@@ -43,7 +43,8 @@ void show_data(char[] , char[]);
 void search_customer(char[] , float* val = 0 , int inv_no = 0);
 void search_product(char[] );
 int  scan(char [],char []);
-extern int evaluator ( char exp [] ) ;
+extern double evaluator ( char exp [] ) ;
+int  ispara_oprtr ( char ) ;
 
 
 		//GLOBAL VARIABLES
@@ -3514,13 +3515,13 @@ int customer::credit_entry( float* val , int inv_no )
 			}
 			
 			if ( (int)temp != 8 && (int)temp != 13 ) 
-				if ( i != 10 && ( isdigit(temp) || temp=='.' ) )
+				if ( i != 10 && ( isdigit(temp) || temp=='.' || ispara_oprtr (temp) ) )
 				{
 					if ( temp == '.' )
 						for ( j = 0 ; j < i ; ++j )
 							if ( temp_cr[j] == '.' ) break ;
 					
-					if ( isdigit(temp) || j == i ) temp_cr[i++] = temp ;
+					if ( isdigit(temp) || j == i || ispara_oprtr (temp) ) temp_cr[i++] = temp ;
 				}
 				
 			if ( (int)temp == 8 )
@@ -3544,7 +3545,7 @@ int customer::credit_entry( float* val , int inv_no )
 		
 		if ( strcmp ( temp_cr , "" ) )
 		{
-			tot_cr+=atof(temp_cr) ;
+			tot_cr+=evaluator(temp_cr) ;
 			
 			if ( cr_entries == 10 )
 			{
@@ -3555,7 +3556,7 @@ int customer::credit_entry( float* val , int inv_no )
 				--cr_entries ;
 			}
 			
-			cr[cr_entries].cr_val = atof(temp_cr);
+			cr[cr_entries].cr_val = evaluator(temp_cr);
 			strcpy(cr[cr_entries].date , curr_date);
 			
 			cr_entries++ ;
@@ -3697,13 +3698,13 @@ int customer::credit_pay()
 			}
 			
 			if ( (int)temp != 8 && (int)temp != 13 ) 
-				if ( i != 10 && ( isdigit(temp) || temp=='.' ) )
+				if ( i != 10 && ( isdigit(temp) || temp=='.' || ispara_oprtr(temp)) )
 				{
 					if ( temp == '.' )
 						for ( j = 0 ; j < i ; ++j )
 							if ( temp_cr[j] == '.' ) break ;
 					
-					if ( isdigit(temp) || j == i ) temp_cr[i++] = temp ;
+					if ( isdigit(temp) || j == i || ispara_oprtr(temp)) temp_cr[i++] = temp ;
 				}
 				
 			if ( (int)temp == 8 )
@@ -3725,7 +3726,7 @@ int customer::credit_pay()
 		}
 		temp_cr[i] = '\0';
 		
-		if ( atof ( temp_cr ) > tot_cr )
+		if ( evaluator ( temp_cr ) > tot_cr )
 		{
 			flag = 1 ; 
 			continue ;
@@ -3735,7 +3736,7 @@ int customer::credit_pay()
 		
 		if ( strcmp ( temp_cr , "" ) )
 		{
-			tot_cr-=atof(temp_cr) ;
+			tot_cr-=evaluator(temp_cr) ;
 			
 			if ( cr_entries == 10 )
 			{
@@ -3746,7 +3747,7 @@ int customer::credit_pay()
 				--cr_entries ;
 			}
 			
-			cr[cr_entries].cr_val = - atof(temp_cr);
+			cr[cr_entries].cr_val = - evaluator(temp_cr);
 			strcpy(cr[cr_entries].date , curr_date);
 			cr_entries++ ;
 
@@ -5413,4 +5414,11 @@ void bill::show_data(char type[] , int offset )
 
 }
 
-
+int ispara_oprtr ( char ch )
+{
+	if ( ch == '[' || ch == '{' || ch == '(' || ch == ')' || ch == '}' || ch == ')' ) return 1 ;
+	
+	else if ( ch == '+' || ch == '-' || ch == '*' || ch == '\\' ) return 1 ;
+	
+	return 0 ;
+}
