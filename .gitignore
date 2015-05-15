@@ -1,3 +1,6 @@
 ssp_main.map
 ssp_main.obj
 BACKUP/
+evaluator.obj
+para_match.obj
+space_remover.obj
