@@ -55,8 +55,8 @@ char name[50] = "" ;
 class login_credits
 {
 	public:
-		char username[50];
-		char password[50];
+		char username[100];
+		char password[100];
 	
 	login_credits()
 	{
@@ -396,13 +396,13 @@ void header()
 void login_main()
 {
 	int flag = 1 , i = 0 , j = 0 ;
-	char user[25] = "" , pwd_ = '' , pwd[25] = "" ;
+	char user[100] = "" , pwd_ = '' , pwd[100] = "" ;
 	
 	login_credits log ;
 	
 	fstream file("log_crd.bin",ios::in|ios::binary) ;
-	file.getline(log.username,50,'\n');
-	file.getline(log.password,50,'\n');
+	file.getline(log.username,100,'\n');
+	file.getline(log.password,100,'\n');
 	file.close() ;
 	
 	if( !strcmp(log.username,"") && !strcmp(log.password,"") ) 
@@ -478,6 +478,7 @@ void login_main()
 		if (!strcmp(log.username,"admin") && !strcmp(log.password,"*admin*"))
 		{
 			encode ( user , pwd ) ;
+
 			file.open("log_crd.bin",ios::out|ios::binary) ;
 			file<<user<<'\n'<<pwd;
 			file.close() ;
@@ -500,8 +501,8 @@ void login_main()
 void encode ( char user [] , char pwd [] )
 {
 	int i = 0 , j = 0 ;
-	char temp[50] = "" , t[5] = "" ;
-	
+	char temp[100] = "" , t[5] = "" ;
+
 	for ( i = 0 ; user[i] != '\0' ; ++i )
 	{
 			if ( (int) user[i] >= 100 ) { temp[j] = '3' ; j = j + 4 ; }
@@ -513,14 +514,16 @@ void encode ( char user [] , char pwd [] )
 	}
 	
 	strcpy ( user , temp );
+
 	strcpy ( temp , "" ) ;
 	strcpy ( t , "" ) ; 
+
 	i = j = 0 ;
-	temp[0]='\0';
-	char temp_[50]="";
+
+	char temp_[100]="";
 	for ( i = 0 ; pwd[i] != '\0' ; ++i )
 	{
-			if(!i)strcpy(temp , "" );
+			if(!i)strcpy(temp_ , "" );
 			if ( (int) pwd[i] >= 100 ) { temp_[j] = '3' ; j = j + 4 ; }
 			else if ( (int) pwd[i] >= 10 ) { temp_[j] = '2' ; j = j + 3 ; }
 			else { temp_[j] = '1' ; j = j + 2 ; }
@@ -529,12 +532,13 @@ void encode ( char user [] , char pwd [] )
 	}
 	
 	strcpy ( pwd , temp_ );	
+
 }
 
 void decode ( char user [] , char pwd [] )
 {
 	int i = 0 , j = 0 , z = 0 ,  val = 0 ; 
-	char temp[50] = "" , t[5] = "" ;
+	char temp[100] = "" , temp_[100] = "" , t[5] = "" ;
 	char ch = '' ;
 	int flag = 0 ;
 	
@@ -560,6 +564,7 @@ void decode ( char user [] , char pwd [] )
 	
 	strcpy ( user , temp ) ;
 	strcpy ( temp , ""  ) ;
+	strcpy ( temp_ , ""  ) ;
 	flag = 0 ; 
 	
 	for ( i = 0 ; pwd[i] != '\0' ; ++i )
@@ -577,12 +582,12 @@ void decode ( char user [] , char pwd [] )
 		t[j]='\0';
 		
 		val = atoi (t) ;
-		temp[flag++] = (char)val ;
+		temp_[flag++] = (char)val ;
 				
 		if ( pwd[i+1] == '\0' ) break ;
 	}
 	
-	strcpy ( pwd , temp ) ;	
+	strcpy ( pwd , temp_ ) ;	
 	
 }
 
