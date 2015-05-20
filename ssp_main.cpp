@@ -1,18 +1,17 @@
 //HEADER FILES
 //<<!!============================!!>>
-#include<fstream.h>
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<ctype.h>
-#include<process.h>
-#include<iomanip.h>
-#include<math.h>
-#include<time.h>
-#include<windows.h>
+#include <fstream.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <process.h>
+#include <iomanip.h>
+#include <math.h>
+#include <time.h>
+#include <windows.h>
 //<<!!============================!!>>
 //HEADER FILES OVER !!!
-
 
 		//FUNCTION PROTOTYPES
 //<<!!============================!!>>
@@ -1843,7 +1842,7 @@ void search_customer( char purpose [] , float* val , int inv_no )
 				{
 					for ( int z = 21 ; z <= 21+(2*rslt) ; ++z )
 					{
-						for ( int k = 5 ; k < 151  ; ++k )
+						for ( int k = 5 ; k < 153  ; ++k )
 						{
 							cout<<endl ;
 							gotoxy( k , z ) ;
@@ -1858,7 +1857,7 @@ void search_customer( char purpose [] , float* val , int inv_no )
 				{
 					for ( int z = 21 ; z <= 21+(2*rslt) ; ++z )
 					{
-						for ( int k = 5 ; k < 151  ; ++k )
+						for ( int k = 5 ; k < 153  ; ++k )
 						{
 							cout<<endl ;
 							gotoxy( k , z ) ;
@@ -5418,7 +5417,7 @@ int ispara_oprtr ( char ch )
 {
 	if ( ch == '[' || ch == '{' || ch == '(' || ch == ')' || ch == '}' || ch == ')' ) return 1 ;
 	
-	else if ( ch == '+' || ch == '-' || ch == '*' || ch == '\\' ) return 1 ;
+	else if ( ch == '+' || ch == '-' || ch == '*' || ch == '/' ) return 1 ;
 	
 	return 0 ;
 }

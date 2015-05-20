@@ -94,9 +94,9 @@ extern double evaluator ( char expr[] )
 			if ( top != -1 )
 			{
 				if ( A[top].opcode == 1 ) result += A[top--].operand ;
-				else if ( A[top].opcode == 2 ) result -= A[top--].operand ;
+				else if ( A[top].opcode == 2 ) result = A[top--].operand - result ;
 				else if ( A[top].opcode == 3 ) result *= A[top--].operand ;
-				else if ( A[top].opcode == 4 ) result /= A[top--].operand ;
+				else if ( A[top].opcode == 4 ) result = A[top--].operand / result ;
 			}
 			if ( !result ) result = temp ;
 			temp = 0 ;
