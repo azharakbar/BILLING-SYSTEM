@@ -1063,6 +1063,7 @@ void sales_control()
 		switch ( choice )
 		{
 			case '1':
+RENEW_BILL_NUMBER :
 				mainfile.open("bill_list.bin" , ios::in | ios::binary ) ;
 				mainfile.seekg(0,ios::end);
 				int pos = mainfile.tellg();
@@ -1083,6 +1084,9 @@ void sales_control()
 					
 					if ( flag == -1 )
 						break ; 
+
+					if ( flag == -2 )
+						goto RENEW_BILL_NUMBER ;
 					
 				}while(!flag||flag) ; 
 				
@@ -3558,7 +3562,8 @@ int customer::credit_entry( float* val , int inv_no )
 			
 			cr[cr_entries].cr_val = evaluator(temp_cr);
 			strcpy(cr[cr_entries].date , curr_date);
-			
+			cr[cr_entries].invoice_no = 0 ;
+
 			cr_entries++ ;
 
 			flag = 0 ; 
@@ -3622,6 +3627,26 @@ int customer::credit_entry( float* val , int inv_no )
 		cout<<">> UPDATED CREDIT (INR)   :            "<<tot_cr<<".00"<<endl;
 	else if((int)(tot_cr*2)==(float)(tot_cr*2))
 		cout<<">> UPDATED CREDIT (INR)   :            "<<tot_cr<<"0"<<endl;
+
+	char temp_name[50] ;
+	strcpy ( temp_name , name );
+	strcat ( temp_name , ".txt");
+
+	fstream file ;
+
+	file.open ( temp_name , ios::out|ios::noreplace );
+	file.close () ;			
+
+	file.open ( temp_name , ios::app ) ;
+		
+	file<<">> "<<cr[cr_entries-1].date<<"\t\t";
+
+	file<<"CR : "<<cr[cr_entries-1].cr_val;
+	if ( cr[cr_entries-1].invoice_no ) file<<"\t\t>> INVOICE NO.: "<<cr[cr_entries-1].invoice_no;
+	file<<"\t\tBALANCE :"<<tot_cr<<endl;
+
+	file.close() ;
+
 	msg_box("|| ** DATA SAVED ** || ** HIT >> ENTER << TO GO BACK ** ||") ;
 	cout<<endl;
 	gotoxy(0,0);
@@ -3749,6 +3774,24 @@ int customer::credit_pay()
 			
 			cr[cr_entries].cr_val = - evaluator(temp_cr);
 			strcpy(cr[cr_entries].date , curr_date);
+
+			char temp_name[50] ;
+			strcpy ( temp_name , name );
+			strcat ( temp_name , ".txt");
+			
+			fstream file ;
+			file.open ( temp_name , ios::out|ios::noreplace );
+			file.close () ;
+			file.open ( temp_name , ios::app ) ;
+				
+			file<<">> "<<cr[cr_entries].date<<"\t\t";
+			
+			file<<"PD : "<<-cr[cr_entries].cr_val<<"\t\t";
+
+			file<<"BALANCE :"<<tot_cr<<endl;
+
+			file.close() ;
+
 			cr_entries++ ;
 
 			flag = 0 ; 
@@ -4284,6 +4327,9 @@ READ_BC:
 			{
 					
 				temp=getch();
+
+				if ( !i && slno == 1 && (int)temp == 13 )
+					return -2 ;
 				
 				if ( !i && slno > 1 && (int)temp == 13 )
 				{
@@ -5342,6 +5388,7 @@ void bill::show_data(char type[] , int offset )
 		cout<<endl<<endl;
 		
 		cout<<"   >> INVOICE NO.: "<<bill_no <<endl;
+		gotoxy ( 140 , 13 );  cout << bill_date <<" : BILL DATE << " <<endl ;
 		
 		for ( i = 1 ; i<=168 ; ++i )
 			cout<<(char)220 ;
