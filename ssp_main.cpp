@@ -2338,11 +2338,12 @@ PURPOSE:
 		
 		flag = 0 ;
 		
-		newfile. open ( "temp.bin" , ios::app|ios::binary );
-		
-				newfile.write((char*)&p_found , sizeof(product)) ;
-		
-		newfile.close();				
+		if ( strcmp ( p_found.barcode , "-1" ) )
+		{
+			newfile. open ( "temp.bin" , ios::app|ios::binary );
+			newfile.write((char*)&p_found , sizeof(product)) ;
+			newfile.close();				
+		}
 		
 		remove ( "prod_list.bin" ) ;
 		rename ( "temp.bin" , "prod_list.bin" );		
