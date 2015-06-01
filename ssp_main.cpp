@@ -136,11 +136,15 @@ public:
 	}
 };
 
+
+
+
 struct item_bill
 {
 	product prd ;
-	int qty ; 
+	float qty ; 
 };
+
 
 
 class bill
@@ -176,6 +180,7 @@ public :
 
 
 
+
 		//MAIN() FUNCTION
 //<<!!============================!!>>
 void main()
@@ -193,29 +198,31 @@ void main()
 	file.open("bill_list.bin",ios::out|ios::noreplace);
 	file.close();
 
-/*	fstream afile("cust_list.bin",ios::in|ios::binary);
-	fstream bfile("cust_list.bin",ios::out|ios::binary);
-	customer c;
-	customer c_;
+
+/*	fstream afile("bill_list.bin",ios::in|ios::binary);
+	fstream bfile("bill_list_new.bin",ios::out|ios::binary);
+	bill b;
+	bill_new b_;
 	char temp [10]="";
-	while(afile.read((char*)&c,sizeof(customer)))
+	while(afile.read((char*)&b,sizeof(bill)))
 	{
-		strcpy(c_.ccode,c.ccode);
-		strcpy(c_.name,c.name);
-		c_.ctc_no = c.ctc_no;
-		c_.cr_entries = c.cr_entries ;
-		c_.tot_cr = c.tot_cr ;
-		for ( i = 0 ; i < 50 ; ++ i)
-			c_.cr[i] = c.cr[i] ;
-		j = 0 ;	
-		strcpy(temp,"");
-		for ( i = 3 ; c.ccode[i]!='\0';++i)
+		b_.bill_no = b.bill_no ;
+		strcpy ( b_.bill_date , b.bill_date ) ;
+		b_.item_count = b.item_count ;
+		b_.total = b.total ;
+		b_.dis = b.dis ;
+		b_.net_total = b.net_total ;
+		b_.cash = b.cash ;
+		b_.credit = b.credit ;
+		strcpy ( b_.name , b.name );
+		for ( i = 0 ; i < b.item_count ; ++i ) 
 		{
-			temp[j++] = c.ccode[i] ;
-		}
-		temp[j] = '\0' ;
-		c_.icode = atoi(temp);
-		bfile.write((char*)&c_,sizeof(customer));
+			strcpy ( b_.item[i].prd.barcode , b.item[i].prd.barcode );
+			strcpy ( b_.item[i].prd.name , b.item[i].prd.name );
+			b_.item[i].prd.price = b.item[i].prd.price ;
+			b_.item[i].qty = b.item[i].qty;
+		}		
+		bfile.write((char*)&b_,sizeof(bill_new));
 	}
 	
 	bfile.close();
@@ -4777,8 +4784,15 @@ READ_QTY:
 					goto READ_BC ;
 					
 				if ( (int)temp != 8 && (int)temp != 13 ) 
-					if ( i !=9 && isdigit(temp) )
-						temp_qty[i++] = toupper(temp) ;
+					if ( i != 9 && ( isdigit(temp) || temp=='.' ) )
+					{
+						if ( temp == '.' )
+							for ( j = 0 ; j < i ; ++j )
+								if ( temp_qty[j] == '.' ) break ;
+						
+						if ( isdigit(temp) || j == i ) temp_qty[i++] = temp ;
+					}
+
 					
 				if ( (int)temp == 8 )
 					if ( i != 0 )
@@ -4812,8 +4826,8 @@ READ_QTY:
 			
 			if ( flag ) 
 			{
-				item[i].qty += atoi(temp_qty) ; 
-				total = total + ( item[i].prd.price * atoi ( temp_qty ) ); 	
+				item[i].qty += atof(temp_qty) ; 
+				total = total + ( item[i].prd.price * atof ( temp_qty ) ); 	
 				tot = item[i].prd.price * item[i].qty ;
 				cout<<endl ;
 				gotoxy ( 135 , 19+2*(i));
@@ -4833,7 +4847,7 @@ READ_QTY:
 			
 			else
 			{
-				tot = p.price * atoi ( temp_qty ) ;
+				tot = p.price * atof ( temp_qty ) ;
 				cout<<endl;
 
 				if((int)tot == (float)tot)
@@ -4843,7 +4857,7 @@ READ_QTY:
 				else
 					{gotoxy ( 150 , 19+2*(slno-1) ); cout << setw(6)<<float(tot) <<endl;}					
 				item[slno-1].prd = p ;
-				item[slno-1].qty=atoi(temp_qty);
+				item[slno-1].qty=atof(temp_qty);
 				total += tot ;
 			}
 			
