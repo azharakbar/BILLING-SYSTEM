@@ -344,35 +344,23 @@ void welcome_screen()
 		cout << (char) 223 ;
 	cout<<endl ;
 	gotoxy(51,7);
-	cout<<" .oooooo..o ooooo     ooo ooooooooo.   oooooooooooo ooooooooo."<<endl;   
-	gotoxy(51,8);
-	cout<<"d8P'    `Y8 `888'     `8' `888   `Y88. `888'     `8 `888   `Y88."<<endl; 
-	gotoxy(51,9);
-	cout<<"Y88bo.       888       8   888   .d88'  888          888   .d88'"<<endl; 
-	gotoxy(51,10);
-	cout<<" `\"Y8888o.   888       8   888ooo88P'   888oooo8     888ooo88P'"<<endl;  
-	gotoxy(51,11);
-	cout<<"      \"Y88b  888       8   888          888    \"     888`88b."<<endl;    
-	gotoxy(51,12);
-	cout<<"oo     .d8P  `88.    .8'   888          888       o  888  `88b."<<endl;  
-	gotoxy(51,13);
-	cout<<"8\"\"88888P'     `YbodP'    o888o        o888ooooood8 o888o  o888o"<<endl; 
+	cout<<" .oooooo..o ooooo     ooo ooooooooo.   oooooooooooo ooooooooo."<<endl;  		gotoxy(51,8);
+	cout<<"d8P'    `Y8 `888'     `8' `888   `Y88. `888'     `8 `888   `Y88."<<endl; 	gotoxy(51,9);
+	cout<<"Y88bo.       888       8   888   .d88'  888          888   .d88'"<<endl; 	gotoxy(51,10);
+	cout<<" `\"Y8888o.   888       8   888ooo88P'   888oooo8     888ooo88P'"<<endl; 	gotoxy(51,11);
+	cout<<"      \"Y88b  888       8   888          888    \"     888`88b."<<endl;  	gotoxy(51,12);
+	cout<<"oo     .d8P  `88.    .8'   888          888       o  888  `88b."<<endl;  	gotoxy(51,13);
+	cout<<"8\"\"88888P'     `YbodP'    o888o        o888ooooood8 o888o  o888o"<<endl ;
+	
 	gotoxy(51,16);																 
 																 
-																	 
-	cout<<" .oooooo..o ooooooooooooo   .oooooo.   ooooooooo.   oooooooooooo "<<endl;
-	gotoxy(51,17);
-	cout<<"d8P'    `Y8 8'   888   `8  d8P'  `Y8b  `888   `Y88. `888'     `8 "<<endl;
-	gotoxy(51,18);
-	cout<<"Y88bo.           888      888      888  888   .d88'  888         "<<endl;
-	gotoxy(51,19);
-	cout<<" `\"Y8888o.       888      888      888  888ooo88P'   888oooo8    "<<endl;
-	gotoxy(51,20);
-	cout<<"     `\"Y88b      888      888      888  888`88b.     888    \"    "<<endl;
-	gotoxy(51,21);
-	cout<<"oo     .d8P      888      `88b    d88'  888  `88b.   888       o "<<endl;
-	gotoxy(51,22);
-	cout<<"8\"\"88888P'      o888o      `Y8bood8P'  o888o  o888o o888ooooood8 	"<<endl;
+	cout<<" .oooooo..o ooooooooooooo   .oooooo.   ooooooooo.   oooooooooooo "<<endl;	gotoxy(51,17);
+	cout<<"d8P'    `Y8 8'   888   `8  d8P'  `Y8b  `888   `Y88. `888'     `8 "<<endl;	gotoxy(51,18);
+	cout<<"Y88bo.           888      888      888  888   .d88'  888         "<<endl;	gotoxy(51,19);
+	cout<<" `\"Y8888o.       888      888      888  888ooo88P'   888oooo8    "<<endl;	gotoxy(51,20);
+	cout<<"     `\"Y88b      888      888      888  888`88b.     888    \"    "<<endl;	gotoxy(51,21);
+	cout<<"oo     .d8P      888      `88b    d88'  888  `88b.   888       o "<<endl;	gotoxy(51,22);
+	cout<<"8\"\"88888P'      o888o      `Y8bood8P'  o888o  o888o o888ooooood8 	"<<endl ;
 
 	gotoxy(50,23);
 	for ( i=0 ; i<=65 ; ++i )
@@ -2065,7 +2053,7 @@ void search_customer( char purpose [] , float* val , int inv_no )
 
 void search_product( char purpose [] )
 {
-	int i=0 , j=0 , flag = 0 , rslt = 0 ;
+	int i=0 , j=0 , flag = 0 , rslt = 0  , pos = 0; 
 	char ch = NULL , prod_name[50] = "" , prod_bc[20] = "" , temp[150] = "" , msg[150] = "" ;
 	fstream mainfile , newfile ;
 	product p , p_found , p_found_same ;
@@ -2111,12 +2099,14 @@ SEARCH_NAME:
 			
 			else if ( i && rslt == 1 )
 			{
+				gotoxy ( 2 , 21+(pos*2) ) ; cout << (char)16 << endl ;
 				strcpy ( msg , "HIT >> ENTER << TO PROCEED WITH THIS PRODUCT" ) ;
 				msg_box( msg );
 			}
 			
-			else
+			else	
 			{
+				gotoxy ( 2 , 21+(pos*2) ) ; cout << (char)16 << endl ;
 				itoa ( rslt , temp , 10 ) ;
 				strcpy ( msg , "" );
 				strcpy(msg , "** DISPLAYING " ) ;
@@ -2128,11 +2118,17 @@ SEARCH_NAME:
 			gotoxy ( 34+strlen(prod_name) , 17 ) ;
 			
 			ch=_getch();
-			
-			if ( !i && (int)ch == 9 ) goto SEARCH_BC ;
+
+			if ( !i && (int)ch == 9 ) goto SEARCH_BC ;			
 						
 			if ( prod_name[0]=='0' && i==1 && (int)ch == 13 )
 				return  ;
+
+			if ( rslt >= 1 && (int)ch == 13 ) 
+			{
+				flag = 2 ;
+				break ;
+			}							
 				
 			if ( ( !rslt || rslt > 1 ) && !strcmp(p_found_same.name , "" ) && (int)ch == 13 ) 
 			{	
@@ -2147,15 +2143,12 @@ SEARCH_NAME:
 				break ;
 			}			
 			
-			if ( rslt == 1 && (int)ch == 13 ) 
-			{
-				flag = 2 ;
-				break ;
-			}
 			
-			if ( (int)ch != 8 && (int)ch != 13 && (int)ch != 9 ) 
+			if ( (int)ch != 8 && (int)ch != 13 && (int)ch != 9 && (int)ch != 19 && (int)ch != 23 ) 
 				if ( i !=47 )
 				{
+					gotoxy ( 2 , 21+(pos*2) ); cout << ' ' << endl ;
+					pos = 0 ;
 					prod_name[i++] = toupper(ch) ;
 					prod_name[i] = '\0' ;
 				}
@@ -2168,10 +2161,25 @@ SEARCH_NAME:
 				}
 				else
 						i = 0 ;		
-		
 			
+			if ( (int)ch == 23 )
+			{
+				gotoxy ( 2 , 21+(pos*2) ); cout << ' ' << endl ;
+				if ( pos != 0 )		--pos ;
+								
+				else pos = rslt - 1 ;
+			}
 			
-			if ( i>=0 ) 
+			if ( (int)ch == 19 )
+			{
+				gotoxy ( 2 , 21+(pos*2) ); cout << ' ' << endl ;
+				if ( pos+1 < rslt )
+					++pos ;
+				else
+					pos = 0 ;
+			}				
+			
+			if ( i>=0 && (int)ch != 9 && (int)ch != 19 && (int)ch != 23 ) 
 			{
 				gotoxy ( 34 , 17 ) ;
 				printf("                                                           ") ;
@@ -2188,9 +2196,10 @@ SEARCH_NAME:
 				
 				if ( !i ) 
 				{
+					gotoxy ( 2 , 21+(pos*2) ); cout <<' '<<endl ;
 					for ( int z = 21 ; z <= 21+(2*rslt) ; ++z )
 					{
-						for ( int k = 5 ; k < 151  ; ++k )
+						for ( int k = 5 ; k < 153  ; ++k )
 						{
 							cout<<endl ;
 							gotoxy( k , z ) ;
@@ -2203,9 +2212,10 @@ SEARCH_NAME:
 				
 				if( i > 0 )
 				{
+					gotoxy ( 2 , 21+(pos*2) ); cout <<' '<<endl ;
 					for ( int z = 21 ; z <= 21+(2*rslt) ; ++z )
 					{
-						for ( int k = 5 ; k < 151  ; ++k )
+						for ( int k = 5 ; k < 153  ; ++k )
 						{
 							cout<<endl ;
 							gotoxy( k , z ) ;
@@ -2236,11 +2246,28 @@ SEARCH_NAME:
 		if ( flag == 2 ) break ;
 
 	}while ( !flag || flag ) ;
+
+	rslt = 0 ;
+	mainfile . open ( "prod_list.bin" , ios::in | ios::binary );
+	while (mainfile.read((char*)&p , sizeof(product)))
+	{
+		if ( strstr(p.name , prod_name ))
+		{
+			if ( pos == rslt )
+			{
+				p_found = p ;
+				break ;
+			}
+			++rslt ; 
+		}
+	}
+	mainfile . close () ;
+
 	goto PURPOSE;
 	
 	
 SEARCH_BC:
-	i=0 , j=0 , flag = 0 , rslt = 0 ;
+	i=0 , j=0 , flag = 0 , rslt = 0  , pos = 0;
 	strcpy(prod_bc,"");strcpy(temp,"");	ch=NULL; 
 	
 	gotoxy ( 0 , 17 ) ;
@@ -2272,12 +2299,14 @@ SEARCH_BC:
 			
 			else if ( i && rslt == 1 )
 			{
+				gotoxy ( 2 , 21+(pos*2) ) ; cout << (char)16 << endl ;
 				strcpy ( msg , "HIT >> ENTER << TO PROCEED WITH THIS PRODUCT" ) ;
 				msg_box( msg );
 			}
 			
-			else
+			else	
 			{
+				gotoxy ( 2 , 21+(pos*2) ) ; cout << (char)16 << endl ;
 				itoa ( rslt , temp , 10 ) ;
 				strcpy ( msg , "" );
 				strcpy(msg , "** DISPLAYING " ) ;
@@ -2289,13 +2318,17 @@ SEARCH_BC:
 			gotoxy ( 34+strlen(prod_bc) , 17 ) ;
 			
 			ch=_getch();
-			
-			if ( !i && (int)ch == 9 ) goto SEARCH_NAME ;
+
+			if ( !i && (int)ch == 9 ) goto SEARCH_NAME ;			
 						
 			if ( prod_bc[0]=='0' && i==1 && (int)ch == 13 )
-			{
 				return  ;
-			}			
+
+			if ( rslt >= 1 && (int)ch == 13 ) 
+			{
+				flag = 2 ;
+				break ;
+			}							
 				
 			if ( ( !rslt || rslt > 1 ) && !strcmp(p_found_same.barcode , "" ) && (int)ch == 13 ) 
 			{	
@@ -2310,15 +2343,12 @@ SEARCH_BC:
 				break ;
 			}			
 			
-			if ( rslt == 1 && (int)ch == 13 ) 
-			{
-				flag = 2 ;
-				break ;
-			}
 			
-			if ( (int)ch != 8 && (int)ch != 13 && (int)ch != 9 ) 
+			if ( (int)ch != 8 && (int)ch != 13 && (int)ch != 9 && (int)ch != 19 && (int)ch != 23 ) 
 				if ( i !=47 )
 				{
+					gotoxy ( 2 , 21+(pos*2) ); cout << ' ' << endl ;
+					pos = 0 ;
 					prod_bc[i++] = toupper(ch) ;
 					prod_bc[i] = '\0' ;
 				}
@@ -2331,10 +2361,25 @@ SEARCH_BC:
 				}
 				else
 						i = 0 ;		
-		
 			
+			if ( (int)ch == 23 )
+			{
+				gotoxy ( 2 , 21+(pos*2) ); cout << ' ' << endl ;
+				if ( pos != 0 )		--pos ;
+								
+				else pos = rslt - 1 ;
+			}
 			
-			if ( i>=0 ) 
+			if ( (int)ch == 19 )
+			{
+				gotoxy ( 2 , 21+(pos*2) ); cout << ' ' << endl ;
+				if ( pos+1 < rslt )
+					++pos ;
+				else
+					pos = 0 ;
+			}				
+			
+			if ( i>=0 && (int)ch != 9 && (int)ch != 19 && (int)ch != 23 ) 
 			{
 				gotoxy ( 34 , 17 ) ;
 				printf("                                                           ") ;
@@ -2351,9 +2396,10 @@ SEARCH_BC:
 				
 				if ( !i ) 
 				{
+					gotoxy ( 2 , 21+(pos*2) ); cout <<' '<<endl ;
 					for ( int z = 21 ; z <= 21+(2*rslt) ; ++z )
 					{
-						for ( int k = 5 ; k < 151  ; ++k )
+						for ( int k = 5 ; k < 153  ; ++k )
 						{
 							cout<<endl ;
 							gotoxy( k , z ) ;
@@ -2366,9 +2412,10 @@ SEARCH_BC:
 				
 				if( i > 0 )
 				{
+					gotoxy ( 2 , 21+(pos*2) ); cout <<' '<<endl ;
 					for ( int z = 21 ; z <= 21+(2*rslt) ; ++z )
 					{
-						for ( int k = 5 ; k < 151  ; ++k )
+						for ( int k = 5 ; k < 153  ; ++k )
 						{
 							cout<<endl ;
 							gotoxy( k , z ) ;
@@ -2400,6 +2447,24 @@ SEARCH_BC:
 
 	}while ( !flag || flag ) ;
 	
+
+	rslt = 0 ;
+	mainfile . open ( "prod_list.bin" , ios::in | ios::binary );
+	while (mainfile.read((char*)&p , sizeof(product)))
+	{
+		if ( strstr(p.barcode , prod_bc ))
+		{
+			if ( pos == rslt )
+			{
+				p_found = p ;
+				break ;
+			}
+			++rslt ; 
+		}
+	}
+	mainfile . close () ;
+
+
 PURPOSE:
 	if ( flag && !strcmpi ( purpose , "EDIT" ) )
 	{
