@@ -5592,16 +5592,50 @@ void space_remove ( char expr [] )
 
 	for ( i = 0 ; expr[i] != '\0' ; ++i )
 	{
-		if ( expr[i] == '{' ) expr[i] = '(' ;
-		else if ( expr[i] == '[' ) expr[i] = '(' ;
-		else if ( expr[i] == '}' ) expr[i] = ')' ;
-		else if ( expr[i] == ']' ) expr[i] = ')' ;
+		if ( expr[i] == '{' || expr[i] == '[' ) expr[i] = '(' ;
+		else if ( expr[i] == '}' || expr[i] == ']' ) expr[i] = ')' ;
 	}
+
+	char temp[100] = "" ;
+	for ( i = 0 ; expr[i] != '\0' ; ++i )
+	{
+		temp[j++] = expr[i] ;
+
+		if (  expr[i+1] != '\0' )
+		{
+			if ( expr[i] == ')' && isdigit(expr[i+1]) )
+			{
+				temp[j++] = '*' ;
+			}
+			else if ( ( expr[i+1] == '(' && isdigit(expr[i]) ) )
+			{
+				temp[j++] = '*' ;
+			}
+			else if ( ( expr[i] == ')' && expr[i+1] == '(' ) )
+			{
+				temp[j++] = '*' ;
+			}
+		}
+		if ( i && expr[i] == '(')
+		{
+			temp[j++] = '0' ;
+			temp[j++] = '+' ;
+		}
+	}
+	temp[j] = '\0' ;
+
+	strcpy ( expr , temp ) ;
 }
 
 double evaluator ( char expr[] )
 {
-	char temp_expr[100] = "(";
+	char temp_expr[100] = "";
+
+	if ( expr[0] == '-' )
+		strcpy ( temp_expr , "(0" ) ;
+	else
+		strcpy ( temp_expr , "(" ) ;
+
 	strcat ( temp_expr , expr ) ;
 	strcat ( temp_expr , ")" ) ;
 	strcpy ( expr , temp_expr ) ;
@@ -5635,11 +5669,11 @@ double evaluator ( char expr[] )
 				dec = -1 ; 
 			}
 			
-			if ( !result )
+			if ( !result && opcode != 2 )
 				result = temp ;
 			else
 			{
-				if ( opcode == 1 ) result += temp ;
+					 if ( opcode == 1 ) result += temp ;
 				else if ( opcode == 2 ) result -= temp ;
 				else if ( opcode == 3 ) result *= temp ;
 				else if ( opcode == 4 ) result /= temp ;
