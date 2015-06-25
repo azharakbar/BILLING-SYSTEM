@@ -3799,9 +3799,9 @@ int customer::credit_entry( float* val , int inv_no )
 	file<<">> "<<cr[cr_entries-1].date<<"\t\t";
 
 	file<<"CR : "<<cr[cr_entries-1].cr_val;
-	if ( cr[cr_entries-1].invoice_no ) file<<"\t\t>> INVOICE NO.: "<<cr[cr_entries-1].invoice_no;
 	file<<"\t\tBALANCE :"<<tot_cr<<endl;
-
+	if ( cr[cr_entries-1].invoice_no ) file<<"\t\t>> INVOICE NO.: "<<cr[cr_entries-1].invoice_no;
+	
 	file.close() ;
 
 	msg_box("|| ** DATA SAVED ** || ** HIT >> ENTER << TO GO BACK ** ||") ;
